@@ -9,8 +9,10 @@ class InvertedIndex:
     
     def _create_term_dictionary(self):
         self.term_dictionary = {}
+        document_lengths = []
         for idx, document in self.dataloader.dataset.iterrows():
             tokens = word_tokenize(document[self.dataloader.preprocessed_text_field])
+            document_lengths.append(len(tokens))
             unique_terms = set(tokens)
             term_counts = Counter(tokens)
             for term in unique_terms:
@@ -28,3 +30,4 @@ class InvertedIndex:
                             "frequency": term_counts[term],
                             "document_length": len(tokens)
                         }]
+        self.average_document_length = sum(document_lengths)/len(document_lengths)
